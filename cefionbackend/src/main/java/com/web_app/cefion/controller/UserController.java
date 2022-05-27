@@ -4,23 +4,20 @@ import com.web_app.cefion.model.User;
 import com.web_app.cefion.service.UserService;
 import com.web_app.cefion.service.UserValidate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/user")
+@Controller
+@RequestMapping("/auth")
 public class UserController {
-    @Autowired
-    private UserService userService;
-
-    @PostMapping("/add")
-    public String add(@RequestBody User user) {
-        if (!UserValidate.validate(user)) {
-            return "Validate error";
-        }
-        userService.saveUser(user);
-        return "New user is added.";
+    @GetMapping("/login")
+    public String getLoginPage() {
+        return "login";
     }
+
+    @GetMapping("/registration")
+    public String getRegistrationPage() {
+        return "registration";
+    }
+
 }

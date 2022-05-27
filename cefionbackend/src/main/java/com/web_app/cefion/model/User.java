@@ -1,74 +1,34 @@
 package com.web_app.cefion.model;
 
+import com.web_app.cefion.model.field.Role;
+import com.web_app.cefion.model.field.Status;
+import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
+@Data
 @Table(name = "USERS_TB")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "LOGIN", nullable = false)
+    @Column(name = "USERNAME", nullable = false)
     private String username;
-    @Column(name = "PASS")
+    @Column(name = "PASSWORD")
     private String password;
 
-    @Column(name = "NAME")
-    private String name;
-    @Column(name = "SURNAME")
-    private String surname;
+//    @Column(name = "NAME")
+//    private String name;
+//    @Column(name = "SURNAME")
+//    private String surname;
 
     @Column(name = "ROLE")
-    private String role;
+    @Enumerated(value = EnumType.STRING)
+    private Role role;
 
-    public User() {}
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
+    @Column(name = "STATUS")
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
 }
