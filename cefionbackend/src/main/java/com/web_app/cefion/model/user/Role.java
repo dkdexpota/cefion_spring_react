@@ -1,4 +1,4 @@
-package com.web_app.cefion.model.field;
+package com.web_app.cefion.model.user;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -6,10 +6,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public enum Role {
-    SUPER_ADMIN(Set.of(Permission.MANAGE_POSTS, Permission.MANAGE_USERS, Permission.STANDARD_ACCESS)),
-    ADMIN(Set.of(Permission.MANAGE_POSTS, Permission.MANAGE_USERS, Permission.STANDARD_ACCESS)),
-    EDITOR(Set.of(Permission.MANAGE_POSTS, Permission.STANDARD_ACCESS)),
-    COPYWRITER(Set.of(Permission.MANAGE_POSTS, Permission.STANDARD_ACCESS)),
+    SUPER_ADMIN(Set.of(Permission.EDIT_POSTS, Permission.COPY_WRITE_POSTS, Permission.MANAGE_USERS, Permission.STANDARD_ACCESS)),
+    ADMIN(Set.of(Permission.EDIT_POSTS, Permission.COPY_WRITE_POSTS, Permission.MANAGE_USERS, Permission.STANDARD_ACCESS)),
+    EDITOR(Set.of(Permission.EDIT_POSTS, Permission.COPY_WRITE_POSTS, Permission.STANDARD_ACCESS)),
+    COPYWRITER(Set.of(Permission.COPY_WRITE_POSTS, Permission.STANDARD_ACCESS)),
     USER(Set.of(Permission.STANDARD_ACCESS));
 
     private final Set<Permission> permissions;

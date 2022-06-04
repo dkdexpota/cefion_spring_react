@@ -1,6 +1,6 @@
 package com.web_app.cefion.security;
 
-import com.web_app.cefion.model.User;
+import com.web_app.cefion.model.user.User;
 import com.web_app.cefion.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

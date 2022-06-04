@@ -1,7 +1,7 @@
 package com.web_app.cefion.security;
 
-import com.web_app.cefion.model.User;
-import com.web_app.cefion.model.field.Status;
+import com.web_app.cefion.model.user.User;
+import com.web_app.cefion.model.user.Status;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

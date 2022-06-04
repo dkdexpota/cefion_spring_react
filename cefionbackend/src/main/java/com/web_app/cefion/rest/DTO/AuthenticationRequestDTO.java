@@ -1,4 +1,4 @@
-package com.web_app.cefion.rest;
+package com.web_app.cefion.rest.DTO;
 
 import lombok.Data;
 

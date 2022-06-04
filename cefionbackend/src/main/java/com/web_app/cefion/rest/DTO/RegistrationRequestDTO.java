@@ -1,6 +1,6 @@
-package com.web_app.cefion.rest;
+package com.web_app.cefion.rest.DTO;
 
-import com.web_app.cefion.model.field.Role;
+import com.web_app.cefion.model.user.Role;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;

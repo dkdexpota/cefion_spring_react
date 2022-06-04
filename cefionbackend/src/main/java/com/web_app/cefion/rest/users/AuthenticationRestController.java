@@ -1,8 +1,10 @@
-package com.web_app.cefion.rest;
+package com.web_app.cefion.rest.users;
 
-import com.web_app.cefion.model.User;
-import com.web_app.cefion.model.field.Status;
+import com.web_app.cefion.model.user.User;
 import com.web_app.cefion.repository.UserRepository;
+import com.web_app.cefion.rest.DTO.AuthenticationRequestDTO;
+import com.web_app.cefion.rest.DTO.DTOController;
+import com.web_app.cefion.rest.DTO.RegistrationRequestDTO;
 import com.web_app.cefion.security.JwtTokenProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +31,6 @@ public class AuthenticationRestController {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final PasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public AuthenticationRestController(AuthenticationManager authenticationManager, UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
         this.authenticationManager = authenticationManager;
@@ -56,15 +54,11 @@ public class AuthenticationRestController {
     }
 
     @PostMapping("/registration")
-    public String registration(@Valid RegistrationRequestDTO request) {
+    public String registration(@RequestBody @Valid RegistrationRequestDTO request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             return "Username already exist.";
         }
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setPassword(encoder.encode(request.getPassword()));
-        user.setRole(request.getRole());
-        user.setStatus(Status.ACTIVE);
+        User user = DTOController.DTO_to_user(request);
         try {
             userRepository.save(user);
         } catch (Exception e) {

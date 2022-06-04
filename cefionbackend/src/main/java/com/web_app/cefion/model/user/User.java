@@ -1,7 +1,5 @@
-package com.web_app.cefion.model;
+package com.web_app.cefion.model.user;
 
-import com.web_app.cefion.model.field.Role;
-import com.web_app.cefion.model.field.Status;
 import lombok.Data;
 
 import javax.persistence.*;

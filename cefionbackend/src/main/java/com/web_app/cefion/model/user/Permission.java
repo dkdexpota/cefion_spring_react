@@ -1,8 +1,9 @@
-package com.web_app.cefion.model.field;
+package com.web_app.cefion.model.user;
 
 public enum Permission {
     MANAGE_USERS("manage:users"),
-    MANAGE_POSTS("manage:posts"),
+    EDIT_POSTS("edit:posts"),
+    COPY_WRITE_POSTS("copy_write:posts"),
     STANDARD_ACCESS("standard:access");
 
 
