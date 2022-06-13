@@ -1,14 +1,16 @@
-package com.web_app.cefion.model.news;
+package com.web_app.cefion.model.landing;
 
+import com.web_app.cefion.model.news.Status;
+import com.web_app.cefion.model.news.Type;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
 @Data
-@Table(name = "NEWS")
-public class News {
+@Table(name = "MEDIA")
+@Entity
+public class Media {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -18,12 +20,6 @@ public class News {
 
     @Column(name = "IMG_NAME")
     private String img_name;
-
-    @Column(name = "TYPE")
-    private Type type;
-
-    @Column(name = "HASHTAGS")
-    private String hashtags;
 
     @Column(name = "TITLE_RU")
     private String titleRU;
@@ -35,9 +31,6 @@ public class News {
     @Column(name = "DESCRIPTION_EU")
     private String DescriptionEU;
 
-    @Column(name = "AUTHOR")
-    private String author;
-
-    @Column(name = "STATUS")
-    private Status status;
+    @Column(name = "SOURCE")
+    private String source;
 }

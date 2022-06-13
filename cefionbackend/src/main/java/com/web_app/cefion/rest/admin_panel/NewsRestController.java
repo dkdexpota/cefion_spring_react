@@ -1,80 +1,69 @@
 package com.web_app.cefion.rest.admin_panel;
 
-import com.web_app.cefion.model.news.News;
+import com.web_app.cefion.model.news.Status;
 import com.web_app.cefion.repository.NewsRepository;
-import com.web_app.cefion.rest.DTO.DTOController;
-import com.web_app.cefion.rest.DTO.ModelUpdate;
 import com.web_app.cefion.rest.DTO.NewsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/news")
+@PreAuthorize("hasAuthority('edit:posts')")
 public class NewsRestController {
+    private final String imgPath;
     private final NewsRepository newsRepository;
 
-    @Autowired
-    public NewsRestController(NewsRepository newsRepository) {
+    public NewsRestController(NewsRepository newsRepository, @Value("${img.path.news}") String imgPath) {
         this.newsRepository = newsRepository;
+        this.imgPath = imgPath;
     }
 
     @GetMapping
     public List<NewsDTO> getAll() {
-        return (newsRepository.findAll().stream().map(DTOController::news_to_DTO).collect(Collectors.toList()));
+        return ANews.getAll(Status.PUBLIC, newsRepository);
+    }
+
+    @GetMapping("/{type}/page/{id}")
+    public List<NewsDTO> getPage(@PathVariable String type, @PathVariable Integer id) {
+        return ANews.getPage(Status.PUBLIC, type, id, newsRepository);
     }
 
     @GetMapping("/{id}")
-    public NewsDTO getOne(@PathVariable Integer id) {
-        News news = newsRepository.findNewsById(id).orElseThrow(() ->
-                new UsernameNotFoundException("News doesn't exists"));
-        return DTOController.news_to_DTO(news);
+    public NewsDTO getOneNews(@PathVariable Integer id) {
+        return ANews.getOneNews(Status.PUBLIC, id, newsRepository);
     }
 
-
-    @PreAuthorize("hasAuthority('edit:posts')")
-    @PostMapping
-    public String create(@RequestBody NewsDTO newsDTO) {
-        News news = DTOController.DTO_to_news(newsDTO);
-        try {
-            newsRepository.save(news);
-        } catch (Exception e) {
-            return "News save error.";
-        }
-        return "Success";
-    }
-
-    @PreAuthorize("hasAuthority('edit:posts')")
-    @PutMapping("/{id}")
-    public String update(@RequestBody NewsDTO newsDTO, @PathVariable Integer id) {
-        return newsRepository.findById(id)
-                .map(news -> {
-                    try {
-                        newsRepository.save(ModelUpdate.update_news(news, newsDTO));
-                    } catch (Exception e) {
-                        return "News update error.";
-                    }
-                    return "News was updated";
-                })
-                .orElseGet(() -> {
-                    News news = DTOController.DTO_to_news(newsDTO);
-                    news.setId(id);
-                    try {
-                        newsRepository.save(news);
-                    } catch (Exception e) {
-                        return "News create error.";
-                    }
-                    return "News was created";
-                });
-    }
-
-    @PreAuthorize("hasAuthority('edit:posts')")
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
-        newsRepository.deleteById(id);
+    public String delete(@PathVariable Integer id) {
+        return ANews.delete(Status.PUBLIC, id, imgPath, newsRepository);
+    }
+
+    @GetMapping("/img/{id}")
+    public ResponseEntity<Resource> getImg(@PathVariable Integer id) {
+        return ANews.getImg(Status.PUBLIC, id, imgPath, newsRepository);
+    }
+
+    @PutMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public String update(@RequestPart("file") MultipartFile file, @RequestPart("news") NewsDTO newsDTO) {
+        return ANews.update(Status.PUBLIC, file, newsDTO, imgPath, newsRepository);
+    }
+
+    @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public String create(@RequestPart("file") MultipartFile file, @RequestPart("news") NewsDTO newsDTO) {
+        String err = ANews.update(Status.PUBLIC, file, newsDTO, imgPath, newsRepository);
+        if (Objects.equals(err, "")) {
+            ANews.changeStatus(Status.EDIT, Status.PUBLIC, newsDTO.getId(), newsRepository);
+            return "Success";
+        }
+        return err;
     }
 }

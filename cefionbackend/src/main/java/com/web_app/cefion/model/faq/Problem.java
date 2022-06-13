@@ -18,7 +18,6 @@ public class Problem {
     @Column(name = "ANSWER")
     private String answer;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CHAPTER_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Chapter chapter;
 }
