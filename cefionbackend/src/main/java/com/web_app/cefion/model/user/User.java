@@ -1,8 +1,14 @@
 package com.web_app.cefion.model.user;
 
 import lombok.Data;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -17,16 +23,14 @@ public class User {
     @Column(name = "PASSWORD")
     private String password;
 
-//    @Column(name = "NAME")
-//    private String name;
-//    @Column(name = "SURNAME")
-//    private String surname;
+    @Column(name = "TAG_NAME")
+    private String tagName;
 
     @Column(name = "ROLE")
-    @Enumerated(value = EnumType.STRING)
-    private Role role;
+    private Integer role;
 
     @Column(name = "STATUS")
     @Enumerated(value = EnumType.STRING)
     private Status status;
+
 }

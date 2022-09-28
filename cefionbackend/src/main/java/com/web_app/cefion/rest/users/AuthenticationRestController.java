@@ -1,16 +1,19 @@
 package com.web_app.cefion.rest.users;
 
+import com.web_app.cefion.model.user.Role;
+import com.web_app.cefion.model.user.RoleController;
 import com.web_app.cefion.model.user.User;
 import com.web_app.cefion.repository.UserRepository;
-import com.web_app.cefion.rest.DTO.AuthenticationRequestDTO;
+import com.web_app.cefion.rest.DTO.user.AuthenticationRequestDTO;
 import com.web_app.cefion.rest.DTO.DTOController;
-import com.web_app.cefion.rest.DTO.RegistrationRequestDTO;
+import com.web_app.cefion.rest.DTO.user.RegistrationRequestDTO;
 import com.web_app.cefion.security.JwtTokenProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,10 +46,12 @@ public class AuthenticationRestController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User doesn't exists"));
-            String token = jwtTokenProvider.createToken(user.getUsername(), user.getRole().name());
+            String token = jwtTokenProvider.createToken(user.getUsername(), user.getRole().toString());
             Map<Object, Object> response = new HashMap<>();
             response.put("username", request.getUsername());
+            response.put("tagName", user.getTagName());
             response.put("token", token);
+            response.put("roles", RoleController.getRoles(user.getRole()).stream().map(r -> r.toString().toLowerCase()).toList());
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
             return new ResponseEntity<>("Invalid username or password", HttpStatus.FORBIDDEN);
@@ -58,7 +63,7 @@ public class AuthenticationRestController {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             return "Username already exist.";
         }
-        User user = DTOController.DTO_to_user(request);
+        User user = DTOController.registrationDTO_to_user(request);
         try {
             userRepository.save(user);
         } catch (Exception e) {

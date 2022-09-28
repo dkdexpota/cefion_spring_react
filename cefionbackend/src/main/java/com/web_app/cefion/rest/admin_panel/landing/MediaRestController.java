@@ -1,19 +1,17 @@
 package com.web_app.cefion.rest.admin_panel.landing;
 
 import com.web_app.cefion.model.landing.Media;
-import com.web_app.cefion.model.landing.Person;
-import com.web_app.cefion.model.news.News;
 import com.web_app.cefion.repository.MediaRepository;
 import com.web_app.cefion.rest.DTO.DTOController;
-import com.web_app.cefion.rest.DTO.MediaDTO;
+import com.web_app.cefion.rest.DTO.landing.MediaDTO;
 import com.web_app.cefion.rest.DTO.ModelUpdate;
-import com.web_app.cefion.rest.DTO.NewsDTO;
 import com.web_app.cefion.rest.admin_panel.ANews;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,6 +50,7 @@ public class MediaRestController {
         }
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public String create(@RequestPart("file") MultipartFile file, @RequestPart("media") MediaDTO mediaDTO) {
         String imgName = ANews.saveFile(file, imgPath);
@@ -67,6 +66,7 @@ public class MediaRestController {
         }
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @PutMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public String update(@RequestPart("file") MultipartFile file, @RequestPart("media") MediaDTO mediaDTO) {
         String imgName = ANews.saveFile(file, imgPath);
@@ -93,6 +93,7 @@ public class MediaRestController {
         }
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Integer id) {
         return mediaRepository.findById(id)

@@ -4,10 +4,10 @@ import com.web_app.cefion.model.faq.Chapter;
 import com.web_app.cefion.model.faq.Problem;
 import com.web_app.cefion.repository.ChapterRepository;
 import com.web_app.cefion.repository.ProblemRepository;
-import com.web_app.cefion.rest.DTO.ChapterDTO;
+import com.web_app.cefion.rest.DTO.landing.ChapterDTO;
 import com.web_app.cefion.rest.DTO.DTOController;
 import com.web_app.cefion.rest.DTO.ModelUpdate;
-import com.web_app.cefion.rest.DTO.ProblemDTO;
+import com.web_app.cefion.rest.DTO.landing.ProblemDTO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/landing/faqs")
-@PreAuthorize("hasAuthority('manage:users')")
 public class FaqsRestController {
     private final ChapterRepository chapterRepository;
     private final ProblemRepository problemRepository;
@@ -43,6 +42,7 @@ public class FaqsRestController {
         }
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @PutMapping("/problem/{id}")
     public String update_faqs(@RequestBody ProblemDTO problemDTO, @PathVariable Integer id) {
         return problemRepository.findById(id)
@@ -52,6 +52,7 @@ public class FaqsRestController {
                 }).orElse("Problem update error");
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/problem")
     public String create_faqs(@RequestBody ProblemDTO problemDTO) {
         try {
@@ -69,6 +70,7 @@ public class FaqsRestController {
         return "Success";
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @Transactional
     @DeleteMapping("/problem/{id}")
     public String delete_faqs(@PathVariable Integer id) {
@@ -81,6 +83,7 @@ public class FaqsRestController {
         return (chapterRepository.findAll().stream().map(DTOController::chapter_to_DTO).collect(Collectors.toList()));
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @PutMapping("/{id}")
     public String update_chapter(@RequestBody ChapterDTO chapterDTO, @PathVariable Integer id) {
         return chapterRepository.findById(id)
@@ -90,6 +93,7 @@ public class FaqsRestController {
                 }).orElse("Chapter update error");
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @PostMapping
     public String create_chapter(@RequestBody ChapterDTO chapterDTO) {
         Chapter chapter = DTOController.DTO_to_chapter(chapterDTO);

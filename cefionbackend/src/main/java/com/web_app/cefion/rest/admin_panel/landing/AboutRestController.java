@@ -1,25 +1,28 @@
 package com.web_app.cefion.rest.admin_panel.landing;
 
 import com.web_app.cefion.model.landing.Person;
-import com.web_app.cefion.model.news.News;
 import com.web_app.cefion.repository.AboutRepository;
 import com.web_app.cefion.repository.PersonRepository;
 import com.web_app.cefion.rest.DTO.*;
+import com.web_app.cefion.rest.DTO.landing.AboutDTO;
+import com.web_app.cefion.rest.DTO.landing.AboutDescriptionDTO;
+import com.web_app.cefion.rest.DTO.landing.PersonDTO;
 import com.web_app.cefion.rest.admin_panel.ANews;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/landing/about")
+
 public class AboutRestController {
     private final PersonRepository personRepository;
     private final AboutRepository aboutRepository;
@@ -55,6 +58,7 @@ public class AboutRestController {
         }
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @PostMapping(name = "/person", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public String createPerson(@RequestPart("file") MultipartFile file, @RequestPart("person") PersonDTO personDTO) {
         String imgName = ANews.saveFile(file, imgPath);
@@ -70,6 +74,7 @@ public class AboutRestController {
         }
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @PutMapping(name = "/person", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public String updatePerson(@RequestPart("file") MultipartFile file, @RequestPart("person") PersonDTO personDTO) {
         String imgName = ANews.saveFile(file, imgPath);
@@ -96,6 +101,7 @@ public class AboutRestController {
         }
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @PutMapping
     public String updateAbout(@RequestBody AboutDescriptionDTO aboutDescriptionDTO) {
         return aboutRepository.findById(1)
@@ -105,6 +111,7 @@ public class AboutRestController {
                 }).orElse("About update error");
     }
 
+    @PreAuthorize("hasAuthority('admin')")
     @DeleteMapping("/person/{id}")
     public String deletePerson(@PathVariable Integer id) {
         return personRepository.findById(id)

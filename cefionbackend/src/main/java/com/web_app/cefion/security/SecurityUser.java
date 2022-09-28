@@ -1,5 +1,6 @@
 package com.web_app.cefion.security;
 
+import com.web_app.cefion.model.user.RoleController;
 import com.web_app.cefion.model.user.User;
 import com.web_app.cefion.model.user.Status;
 import lombok.Data;
@@ -67,7 +68,7 @@ public class SecurityUser implements UserDetails {
                 user.getStatus().equals(Status.ACTIVE),
                 user.getStatus().equals(Status.ACTIVE),
                 user.getStatus().equals(Status.ACTIVE),
-                user.getRole().getAuthorities()
+                RoleController.getAuthorities(user.getRole())
         );
     }
 }

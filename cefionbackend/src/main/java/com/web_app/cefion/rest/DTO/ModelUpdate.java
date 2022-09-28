@@ -5,6 +5,9 @@ import com.web_app.cefion.model.faq.Problem;
 import com.web_app.cefion.model.landing.*;
 import com.web_app.cefion.model.news.News;
 import com.web_app.cefion.model.user.User;
+import com.web_app.cefion.rest.DTO.landing.*;
+import com.web_app.cefion.rest.DTO.news.NewsDTO;
+import com.web_app.cefion.rest.DTO.user.UserDTO;
 
 import java.util.Date;
 
@@ -66,13 +69,6 @@ public abstract class ModelUpdate {
         media.setTitleRU(mediaDTO.getTitleRU());
         media.setTitleEU(mediaDTO.getTitleEU());
         return media;
-    }
-
-    public static User update_user(User user, UserDTO userDTO) {
-        user.setUsername(userDTO.getUsername());
-        user.setRole(userDTO.getRole());
-        user.setStatus(userDTO.getStatus());
-        return user;
     }
 
     public static Chapter update_chapter(Chapter chapter, ChapterDTO chapterDTO) {

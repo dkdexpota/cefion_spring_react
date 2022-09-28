@@ -15,11 +15,17 @@
 	<name>cefion</name>
 	<description>Demo</description>
 	<properties>
+		<start-class>com.web_app.cefion.CefionApplication</start-class>
 		<java.version>17</java.version>
 		<jjwt.version>0.9.1</jjwt.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+		</dependency>
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>

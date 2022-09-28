@@ -2,7 +2,7 @@ package com.web_app.cefion.rest.admin_panel;
 
 import com.web_app.cefion.model.news.Status;
 import com.web_app.cefion.repository.NewsRepository;
-import com.web_app.cefion.rest.DTO.NewsDTO;
+import com.web_app.cefion.rest.DTO.news.NewsDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/news_edit")
-@PreAuthorize("hasAuthority('copy_write:posts')")
+@PreAuthorize("hasAuthority('copywriter')")
 public class NewsToEditRestController {
 
     private final NewsRepository newsRepository;

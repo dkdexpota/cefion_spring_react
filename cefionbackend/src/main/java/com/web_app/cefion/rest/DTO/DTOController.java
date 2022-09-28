@@ -4,9 +4,18 @@ import com.web_app.cefion.model.faq.Chapter;
 import com.web_app.cefion.model.faq.Problem;
 import com.web_app.cefion.model.landing.*;
 import com.web_app.cefion.model.news.News;
+import com.web_app.cefion.model.news.Price;
 import com.web_app.cefion.model.news.Type;
+import com.web_app.cefion.model.user.RoleController;
 import com.web_app.cefion.model.user.User;
 import com.web_app.cefion.model.user.Status;
+import com.web_app.cefion.rest.DTO.landing.*;
+import com.web_app.cefion.rest.DTO.news.NewsDTO;
+import com.web_app.cefion.rest.DTO.news.PriceDTO;
+import com.web_app.cefion.rest.DTO.user.RegistrationRequestDTO;
+import com.web_app.cefion.rest.DTO.user.UserDTO;
+import org.json.simple.JSONObject;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -23,6 +32,21 @@ public abstract class DTOController {
         inNumberDTO.setDescriptionEU(inNumber.getDescriptionEU());
         inNumberDTO.setDescriptionRU(inNumber.getDescriptionRU());
         return inNumberDTO;
+    }
+
+    public static PriceDTO price_to_DTO(Price price) {
+        PriceDTO priceDTO = new PriceDTO();
+        priceDTO.setTotal_volume(price.getTotal_volume());
+        priceDTO.setMarket_cap(price.getMarket_cap());
+        priceDTO.setMarket_cap_change_24h_in_currency(price.getMarket_cap_change_24h_in_currency());
+        priceDTO.setMarket_cap_change_percentage_24h(price.getMarket_cap_change_percentage_24h());
+        priceDTO.setCurrent_price_btc(price.getCurrent_price_btc());
+        priceDTO.setCurrent_price_usd(price.getCurrent_price_usd());
+        priceDTO.setPrice_change_percentage_1h_in_currency(price.getPrice_change_percentage_1h_in_currency());
+        priceDTO.setPrice_change_percentage_24h_in_currency(price.getPrice_change_percentage_24h_in_currency());
+        priceDTO.setPrice_change_percentage_7d_in_currency(price.getPrice_change_percentage_7d_in_currency());
+        priceDTO.setPrice_change_percentage_30d_in_currency(price.getPrice_change_percentage_30d_in_currency());
+        return priceDTO;
     }
 
     public static InNumber DTO_to_inNumber(InNumberDTO inNumberDTO) {
@@ -140,19 +164,22 @@ public abstract class DTOController {
         return media;
     }
 
-    public static User DTO_to_user(RegistrationRequestDTO requestDTO) {
+    public static User registrationDTO_to_user(RegistrationRequestDTO requestDTO) {
         User user = new User();
         user.setUsername(requestDTO.getUsername());
         user.setPassword(encoder.encode(requestDTO.getPassword()));
-        user.setRole(requestDTO.getRole());
+        user.setTagName(requestDTO.getTagName());
+        user.setRole(RoleController.setAuthorities(requestDTO.getRoles()));
         user.setStatus(Status.ACTIVE);
         return user;
     }
 
     public static UserDTO user_to_DTO(User user) {
         UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
         userDTO.setUsername(user.getUsername());
-        userDTO.setRole(user.getRole());
+        userDTO.setTagName(user.getTagName());
+        userDTO.setRoles(RoleController.getRoles(user.getRole()).stream().map(r -> r.toString().toLowerCase()).toList());
         userDTO.setStatus(user.getStatus());
         return userDTO;
     }

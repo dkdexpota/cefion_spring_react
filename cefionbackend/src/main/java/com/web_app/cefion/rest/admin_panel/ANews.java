@@ -6,16 +6,12 @@ import com.web_app.cefion.model.news.Type;
 import com.web_app.cefion.repository.NewsRepository;
 import com.web_app.cefion.rest.DTO.DTOController;
 import com.web_app.cefion.rest.DTO.ModelUpdate;
-import com.web_app.cefion.rest.DTO.NewsDTO;
-import org.springframework.beans.factory.annotation.Value;
+import com.web_app.cefion.rest.DTO.news.NewsDTO;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -51,7 +47,7 @@ abstract public class ANews {
 
     public static List<NewsDTO> getPage(Status status, String type, Integer id, NewsRepository newsRepository) {
         type = type.toUpperCase();
-        id++;
+        id--;
         return switch (type) {
             case "ALL" ->
                     newsRepository.findAllByStatus(PageRequest.of(id, 8), status)

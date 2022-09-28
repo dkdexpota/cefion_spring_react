@@ -1,11 +1,13 @@
 package com.web_app.cefion.model.user;
 
-public enum Permission {
-    MANAGE_USERS("manage:users"),
-    EDIT_POSTS("edit:posts"),
-    COPY_WRITE_POSTS("copy_write:posts"),
-    STANDARD_ACCESS("standard:access");
+import java.util.Set;
 
+public enum Permission {
+    SUPER_ADMIN("super_admin"),
+    ADMIN("admin"),
+    EDITOR("editor"),
+    COPYWRITER("copywriter"),
+    USER("user");
 
     private final String permission;
 

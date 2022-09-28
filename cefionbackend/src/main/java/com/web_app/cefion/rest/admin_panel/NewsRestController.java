@@ -2,8 +2,7 @@ package com.web_app.cefion.rest.admin_panel;
 
 import com.web_app.cefion.model.news.Status;
 import com.web_app.cefion.repository.NewsRepository;
-import com.web_app.cefion.rest.DTO.NewsDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.web_app.cefion.rest.DTO.news.NewsDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -17,7 +16,7 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/news")
-@PreAuthorize("hasAuthority('edit:posts')")
+
 public class NewsRestController {
     private final String imgPath;
     private final NewsRepository newsRepository;
@@ -42,6 +41,7 @@ public class NewsRestController {
         return ANews.getOneNews(Status.PUBLIC, id, newsRepository);
     }
 
+    @PreAuthorize("hasAuthority('editor')")
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Integer id) {
         return ANews.delete(Status.PUBLIC, id, imgPath, newsRepository);
@@ -52,11 +52,13 @@ public class NewsRestController {
         return ANews.getImg(Status.PUBLIC, id, imgPath, newsRepository);
     }
 
+    @PreAuthorize("hasAuthority('editor')")
     @PutMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public String update(@RequestPart("file") MultipartFile file, @RequestPart("news") NewsDTO newsDTO) {
         return ANews.update(Status.PUBLIC, file, newsDTO, imgPath, newsRepository);
     }
 
+    @PreAuthorize("hasAuthority('editor')")
     @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public String create(@RequestPart("file") MultipartFile file, @RequestPart("news") NewsDTO newsDTO) {
         String err = ANews.update(Status.PUBLIC, file, newsDTO, imgPath, newsRepository);
